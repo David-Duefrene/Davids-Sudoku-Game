@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import GridButton from './components/grid/gridButton'
+
 const BOARDSIZE = 9
 
 function App() {
@@ -7,7 +9,7 @@ function App() {
 
 	const tiles = board.map((row, rowIndex) => {
 		return row.map((tile, tileIndex) => {
-			return <button className='bg-fourth-color w-20 h-20' key={`${rowIndex}${tileIndex}`}>{tile}</button>
+			return <GridButton key={`${rowIndex}${tileIndex}`}>{tile}</GridButton>
 		})
 	})
 	return (
