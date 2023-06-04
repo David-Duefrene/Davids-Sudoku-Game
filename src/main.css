@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	color-scheme: light dark;
+	--first-color: hsla(96, 40%, 74%, 0.9);
+	--second-color: hsla(62, 45%, 77%, 0.9);
+	--third-color: hsla(41, 35%, 69%, 0.9);
+	--fourth-color: hsla(20, 38%, 70%, 0.9);
+
+	--color-bg: linear-gradient(90deg, var(--first-color) 0%, var(--second-color) 100%);
+	--color-text: hsla(0, 0%, 100%, 0.87);
+
+	color: var(--color-text);
+	background-image: var(--color-bg);
+}
+
+@media (prefers-color-scheme: light) {
+	:root {
+		--first-color: hsla(96, 94%, 87%, 0.9);
+		--second-color: hsla(62, 94%, 87%, 0.9);
+		--third-color: hsla(42, 100%, 87%, 0.9);
+		--fourth-color: hsla(20, 100%, 85%, 0.9);
+
+		--color-text: hsla(0, 0%, 0%, 0.87);
+	}
+}
