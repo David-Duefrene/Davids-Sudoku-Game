@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import GridButton from './components/grid/gridButton'
+import GridButton from '../components/grid/gridButton'
 
 const BOARDSIZE = 9
 
