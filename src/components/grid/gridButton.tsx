@@ -16,22 +16,21 @@ const GridButton = function GridButton(props: GridButtonProps) {
 	const canChange = children === typeof 'number' || children?.length > 0
 	const content = value || children
 
-	return (
+	return isClicked ?
+		<NumberSelect
+			setNumber={(num: number | number[]) => {
+				setValue(num)
+				setIsClicked(false)
+			}}
+		/> :
 		<button
 			disabled={canChange}
 			onClick={() => setIsClicked(!isClicked)}
 			className='bg-fourth-color w-20 h-20'
-			key={key} >
-			{ isClicked ?
-				<NumberSelect
-					setNumber={(num: number | number[]) => {
-						setValue(num)
-						setIsClicked(false)
-					}}
-				/> : content
-			}
+			key={key}
+		> {content}
 		</button>
-	)
+
 }
 
 export default GridButton

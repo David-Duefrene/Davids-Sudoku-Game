@@ -4,8 +4,10 @@ type NumberSelectProps = {
 	setNumber: (number: number) => void
 }
 
-const NumberSelect = function numberSelect(props: NumberSelectProps) {
+const NumberSelect = function (props: NumberSelectProps) {
 	const { setNumber } = props
+
+	const [pencilMode, setPencilMode] = useState<boolean>(true)
 
 	const buttons = []
 	for (let i = 1; i <= 9; i++) {
@@ -20,7 +22,13 @@ const NumberSelect = function numberSelect(props: NumberSelectProps) {
 	}
 
 	return (
-		<div className='grid grid-cols-3 bg-third-color w-full h-full'>
+		<div className='grid grid-cols-3 bg-third-color w-full h-full z-50'>
+			<button
+				className='bg-second-color col-span-3'
+				onClick={() => setPencilMode(!pencilMode)}
+				>
+				{pencilMode ? 'Pencil' : 'Pen'}
+			</button>
 			{buttons}
 		</div>
 	)
