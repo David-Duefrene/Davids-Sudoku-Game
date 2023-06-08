@@ -11,7 +11,6 @@ const NumberSelect = function (props: NumberSelectProps) {
 
 	const [pencilMode, setPencilMode] = useState<boolean>(true)
 	const [rerender, setRerender] = useState<boolean>(false)
-	const clicked = () => pencilMode ? {} : close()
 
 	const buttons = []
 	for (let i = 1; i <= 9; i++) {
@@ -31,23 +30,22 @@ const NumberSelect = function (props: NumberSelectProps) {
 						} else {
 							setValue(new Set([i]))
 						}
+						setRerender(!rerender)
 					} else {
 						setValue(i)
+						close()
 					}
-					setRerender(!rerender)
-					clicked()
-				}}
-			> {i}
+				}} >
+					{i}
 			</button>
 		)
 	}
 
 	return (
-		<div className='grid grid-cols-3 bg-third-color w-full h-full z-50'>
+		<div className='grid grid-cols-3 bg-third-color'>
 			<button
 				className='bg-second-color col-span-2'
-				onClick={() => setPencilMode(!pencilMode)}
-				>
+				onClick={() => setPencilMode(!pencilMode)} >
 				{pencilMode ? 'Pencil' : 'Pen'}
 			</button>
 			<button className='bg-second-color' onClick={close}>X</button>

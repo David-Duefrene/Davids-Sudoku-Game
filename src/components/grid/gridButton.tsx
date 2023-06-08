@@ -1,36 +1,33 @@
-import { ReactNode, useState } from 'react'
+import { useState } from 'react'
 
 import NumberSelect from '../numberSelect/numberSelect'
 
 type GridButtonProps = {
-	children?: ReactNode
 	key?: string
 	defaultValue?: number
+	row: number
+	column: number
 }
 
 const GridButton = function GridButton(props: GridButtonProps) {
-	const { key, children } = props
-	const [value, setValue] = useState<number | Set<number> | null>(props.defaultValue || null)
+	const { key, defaultValue } = props
+	const [value, setValue] = useState<number | Set<number> | null>(defaultValue || null)
 	const [isClicked, setIsClicked] = useState<boolean>(false)
 
-	const canChange = children === typeof 'number' || children?.length > 0
-	const content = value || children
+	const canChange = defaultValue === undefined
 
 	return isClicked ?
 		<NumberSelect
 			close={() => setIsClicked(false)}
 			currentValue={value}
-			setValue={(num: number | Set<number>) => {
-				setValue(num)
-				setIsClicked(false)
-			}}
+			setValue={(num: number | Set<number>) => setValue(num)}
 		/> :
 		<button
 			disabled={canChange}
 			onClick={() => setIsClicked(!isClicked)}
-			className='bg-fourth-color w-20 h-20'
-			key={key}
-		> {content}
+			className='bg-fourth-color w-24 h-24'
+			key={key} >
+				{value}
 		</button>
 
 }
