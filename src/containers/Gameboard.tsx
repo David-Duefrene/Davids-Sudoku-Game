@@ -1,11 +1,10 @@
-import { useState } from 'react'
+import { useContext } from 'react'
 
 import GridButton from '../components/grid/gridButton'
-
-const BOARDSIZE = 9
+import { Context } from '../hooks/useGameState'
 
 function App() {
-	const [board, setBoard] = useState<number[][]>(Array(BOARDSIZE).fill(Array(BOARDSIZE).fill([])))
+	const { board } = useContext(Context)
 
 	const tiles = board.map((row, rowIndex) => {
 		return row.map((colum, columIndex) => {
