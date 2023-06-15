@@ -2,7 +2,6 @@ import { useContext, createContext, ReactElement } from 'react'
 
 const BOARDSIZE = 9
 
-
 type GameStateProps = {
 	children: ReactElement[] | ReactElement
 }

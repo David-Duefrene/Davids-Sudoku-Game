@@ -20,21 +20,22 @@ const NumberSelect = function (props: NumberSelectProps) {
 				key={i}
 				className={hasIndex ? 'invert' : 'bg-second-color '}
 				onClick={() => {
-					if (pencilMode) {
-						if (currentValue instanceof Set) {
-							if (currentValue.has(i)) {
-								currentValue.delete(i)
-							} else {
-								currentValue.add(i)
-							}
-						} else {
-							setValue(new Set([i]))
-						}
-						setRerender(!rerender)
-					} else {
+					if (!pencilMode) {
 						setValue(i)
 						close()
+						return
 					}
+
+					if (currentValue instanceof Set) {
+						if (currentValue.has(i)) {
+							currentValue.delete(i)
+						} else {
+							currentValue.add(i)
+						}
+					} else {
+						setValue(new Set([i]))
+					}
+					setRerender(!rerender)
 				}} >
 					{i}
 			</button>
