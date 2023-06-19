@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 
 import NumberSelect from '../numberSelect/numberSelect'
+import { GameStateContext } from '../../hooks/useGameState'
 
 type GridButtonProps = {
 	key?: string
@@ -10,8 +11,10 @@ type GridButtonProps = {
 }
 
 const GridButton = function GridButton(props: GridButtonProps) {
-	const { key, defaultValue } = props
-	const [value, setValue] = useState<number | Set<number> | null>(defaultValue || null)
+	const { key, defaultValue, row, column } = props
+
+	const gameState = useContext(GameStateContext)
+
 	const [isClicked, setIsClicked] = useState<boolean>(false)
 
 	const canChange = defaultValue === undefined
@@ -19,17 +22,15 @@ const GridButton = function GridButton(props: GridButtonProps) {
 	return isClicked ?
 		<NumberSelect
 			close={() => setIsClicked(false)}
-			currentValue={value}
-			setValue={(num: number | Set<number>) => setValue(num)}
+			position={{ row, column }}
 		/> :
 		<button
 			disabled={canChange}
 			onClick={() => setIsClicked(!isClicked)}
 			className='bg-fourth-color w-24 h-24'
 			key={key} >
-				{value}
+				{gameState.board[row][column]}
 		</button>
-
 }
 
 export default GridButton

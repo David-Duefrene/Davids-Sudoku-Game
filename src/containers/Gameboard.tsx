@@ -1,12 +1,12 @@
 import { useContext } from 'react'
 
 import GridButton from '../components/grid/gridButton'
-import { Context } from '../hooks/useGameState'
+import { GameStateContext } from '../hooks/useGameState'
 
 function App() {
-	const { board } = useContext(Context)
+	const gameState = useContext(GameStateContext)
 
-	const tiles = board.map((row, rowIndex) => {
+	const tiles = gameState.board.map((row, rowIndex) => {
 		return row.map((colum, columIndex) => {
 			const tileProps = {
 				key: `${rowIndex}${columIndex}`,

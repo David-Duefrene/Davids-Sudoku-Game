@@ -1,40 +1,42 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+
+import { GameStateContext } from '../../hooks/useGameState'
 
 type NumberSelectProps = {
-	setValue: (number: number | Set<number> ) => void
-	currentValue?: number | Set<number> | null
+	position: { row: number, column: number }
 	close: () => void
 }
 
 const NumberSelect = function (props: NumberSelectProps) {
-	const { setValue, currentValue, close } = props
+	const { close, position } = props
+
+	const gameState = useContext(GameStateContext)
 
 	const [pencilMode, setPencilMode] = useState<boolean>(true)
+	const [pencilValue, setPencilValue] = useState<Set<number>>(new Set())
 	const [rerender, setRerender] = useState<boolean>(false)
 
 	const buttons = []
 	for (let i = 1; i <= 9; i++) {
-		const hasIndex = currentValue instanceof Set && currentValue.has(i)
+		const hasIndex = pencilValue.has(i)
 		buttons.push(
 			<button
 				key={i}
 				className={hasIndex ? 'invert' : 'bg-second-color '}
 				onClick={() => {
 					if (!pencilMode) {
-						setValue(i)
+						gameState.setTile(position.row, position.column, i)
 						close()
 						return
 					}
 
-					if (currentValue instanceof Set) {
-						if (currentValue.has(i)) {
-							currentValue.delete(i)
-						} else {
-							currentValue.add(i)
-						}
+					if (pencilValue.has(i)) {
+						pencilValue.delete(i)
 					} else {
-						setValue(new Set([i]))
+						pencilValue.add(i)
 					}
+					setPencilValue(pencilValue)
+
 					setRerender(!rerender)
 				}} >
 					{i}
