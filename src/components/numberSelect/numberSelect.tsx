@@ -9,6 +9,7 @@ type NumberSelectProps = {
 
 const NumberSelect = function (props: NumberSelectProps) {
 	const { close, position } = props
+	const { row, column } = position
 
 	const gameState = useContext(GameStateContext)
 
@@ -16,16 +17,20 @@ const NumberSelect = function (props: NumberSelectProps) {
 	const [pencilValue, setPencilValue] = useState<Set<number>>(new Set())
 	const [rerender, setRerender] = useState<boolean>(false)
 
+	const [unusableValues] = useState<Set<number>>(new Set([...gameState.getRow(row), ...gameState.getColumn(column)]))
+
 	const buttons = []
 	for (let i = 1; i <= 9; i++) {
 		const hasIndex = pencilValue.has(i)
+
 		buttons.push(
 			<button
 				key={i}
-				className={hasIndex ? 'invert' : 'bg-second-color '}
+				className={hasIndex ? 'invert' : 'bg-second-color ' + 'disabled:opacity-50'}
+				disabled={unusableValues.has(i) && gameState.board[row][column] !== i}
 				onClick={() => {
 					if (!pencilMode) {
-						gameState.setTile(position.row, position.column, i)
+						gameState.setTile(row, column, i)
 						close()
 						return
 					}
