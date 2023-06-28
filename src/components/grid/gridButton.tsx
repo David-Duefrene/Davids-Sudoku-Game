@@ -1,7 +1,8 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import NumberSelect from '../numberSelect/numberSelect'
-import { GameStateContext } from '../../hooks/useGameState'
+import { RootState } from '../../store/store'
 
 type GridButtonProps = {
 	key?: string
@@ -13,7 +14,7 @@ type GridButtonProps = {
 const GridButton = function GridButton(props: GridButtonProps) {
 	const { key, defaultValue, row, column } = props
 
-	const gameState = useContext(GameStateContext)
+	const board = useSelector((state: RootState) => state.gameState.board)
 
 	const [isClicked, setIsClicked] = useState<boolean>(false)
 
@@ -29,7 +30,7 @@ const GridButton = function GridButton(props: GridButtonProps) {
 			onClick={() => setIsClicked(!isClicked)}
 			className='bg-fourth-color w-24 h-24'
 			key={key} >
-				{gameState.board[row][column]}
+				{board[row][column]}
 		</button>
 }
 

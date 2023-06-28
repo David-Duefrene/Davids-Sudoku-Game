@@ -1,7 +1,7 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux'
 
 import GridButton from '../components/grid/gridButton'
-import { RootState } from '../store/store';
+import { RootState } from '../store/store'
 
 function App() {
 	const gameState = useSelector((state: RootState) => state.gameState.board)
