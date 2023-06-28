@@ -1,14 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { Provider } from 'react-redux'
 
-import GameState from './hooks/useGameState'
+import store from './store/store.ts'
 import GameBoard from './containers/GameBoard.tsx'
 import './main.css'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
-		<GameState>
+		<Provider store={store}>
 			<GameBoard />
-		</GameState>
+		</Provider>
 	</React.StrictMode>,
 )

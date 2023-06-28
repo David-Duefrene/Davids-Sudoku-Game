@@ -1,12 +1,12 @@
-import { useContext } from 'react'
+import { useSelector } from 'react-redux'
 
 import GridButton from '../components/grid/gridButton'
-import { GameStateContext } from '../hooks/useGameState'
+import { RootState } from '../store/store'
 
 function App() {
-	const gameState = useContext(GameStateContext)
+	const gameState = useSelector((state: RootState) => state.gameState.board)
 
-	const tiles = gameState.board.map((row, rowIndex) => {
+	const tiles = gameState.map((row, rowIndex) => {
 		return row.map((colum, columIndex) => {
 			const tileProps = {
 				key: `${rowIndex}${columIndex}`,

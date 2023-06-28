@@ -1,6 +1,8 @@
-import { useState, useContext } from 'react'
+import { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
-import { GameStateContext } from '../../hooks/useGameState'
+import { RootState } from '../../store/store'
+import { setTile as setTileDis } from '../../store/slices/gameBoardSlice'
 
 type NumberSelectProps = {
 	position: { row: number, column: number }
@@ -11,13 +13,27 @@ const NumberSelect = function (props: NumberSelectProps) {
 	const { close, position } = props
 	const { row, column } = position
 
-	const gameState = useContext(GameStateContext)
+	const board = useSelector((state: RootState) => state.gameState.board)
+
+	const dispatch = useDispatch()
+
+	const setTile = (row: number, column: number, value: number) => {
+		dispatch(setTileDis({ row, column, value }))
+	}
+
+	const getRow = (row: number) => board[row]
+	const getColumn = (column: number) => board.map((row) => row[column])
 
 	const [pencilMode, setPencilMode] = useState<boolean>(true)
 	const [pencilValue, setPencilValue] = useState<Set<number>>(new Set())
-	const [rerender, setRerender] = useState<boolean>(false)
 
-	const [unusableValues] = useState<Set<number>>(new Set([...gameState.getRow(row), ...gameState.getColumn(column)]))
+	const [unusableValues, setUnusableValues] = useState<Set<number>>(new Set([...getRow(row), ...getColumn(column)]))
+
+	useEffect(() => {
+		setUnusableValues(
+			new Set([...board[row], ...board.map((row) => row[column])])
+		)
+	}, [board, row, column])
 
 	const buttons = []
 	for (let i = 1; i <= 9; i++) {
@@ -27,10 +43,10 @@ const NumberSelect = function (props: NumberSelectProps) {
 			<button
 				key={i}
 				className={hasIndex ? 'invert' : 'bg-second-color ' + 'disabled:opacity-50'}
-				disabled={unusableValues.has(i) && gameState.board[row][column] !== i}
+				disabled={unusableValues.has(i) && board[row][column] !== i}
 				onClick={() => {
 					if (!pencilMode) {
-						gameState.setTile(row, column, i)
+						setTile(row, column, i)
 						close()
 						return
 					}
@@ -40,9 +56,7 @@ const NumberSelect = function (props: NumberSelectProps) {
 					} else {
 						pencilValue.add(i)
 					}
-					setPencilValue(pencilValue)
-
-					setRerender(!rerender)
+					setPencilValue(new Set(pencilValue))
 				}} >
 					{i}
 			</button>
