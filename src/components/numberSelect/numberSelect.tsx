@@ -23,15 +23,28 @@ const NumberSelect = function (props: NumberSelectProps) {
 
 	const getRow = (row: number) => board[row]
 	const getColumn = (column: number) => board.map((row) => row[column])
+	const getGrid = (row: number, column: number) => {
+		const grid: number[] = []
+		const gridRow = Math.floor(row / 3) * 3
+		const gridColumn = Math.floor(column / 3) * 3
+
+		for (let i = gridRow; i < gridRow +3; i++) {
+			for (let j = gridColumn; j < gridColumn +3; j++) {
+				grid.push(board[i][j])
+			}
+		}
+
+		return grid
+	}
 
 	const [pencilMode, setPencilMode] = useState<boolean>(true)
 	const [pencilValue, setPencilValue] = useState<Set<number>>(new Set())
 
-	const [unusableValues, setUnusableValues] = useState<Set<number>>(new Set([...getRow(row), ...getColumn(column)]))
+	const [unusableValues, setUnusableValues] = useState<Set<number>>(new Set([...getRow(row), ...getColumn(column), ...getGrid(row, column)]))
 
 	useEffect(() => {
 		setUnusableValues(
-			new Set([...board[row], ...board.map((row) => row[column])])
+			new Set([...getRow(row), ...getColumn(column), ...getGrid(row, column)])
 		)
 	}, [board, row, column])
 
