@@ -64,7 +64,7 @@ const NumberSelect = function (props: NumberSelectProps) {
 	}
 
 	return (
-		<div className='grid grid-cols-3 bg-third-color'>
+		<div className='grid grid-cols-3 bg-third-color w-24 h-24'>
 			<button
 				className='bg-second-color col-span-2'
 				onClick={() => setPencilMode(!pencilMode)} >

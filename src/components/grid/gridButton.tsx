@@ -16,9 +16,8 @@ const GridButton = function GridButton(props: GridButtonProps) {
 
 	const board = useSelector((state: RootState) => state.gameState.board)
 
-	const [isClicked, setIsClicked] = useState<boolean>(false)
-
-	const canChange = defaultValue === undefined
+	const canChange = defaultValue === undefined || defaultValue === null
+	const [isClicked, setIsClicked] = useState<boolean>(canChange)
 
 	return isClicked ?
 		<NumberSelect
