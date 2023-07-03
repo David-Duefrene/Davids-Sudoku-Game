@@ -21,6 +21,7 @@ const NumberSelect = function (props: NumberSelectProps) {
 		dispatch(setTileDis({ row, column, value }))
 	}
 
+	// TODO: Move to utils
 	const getRow = (row: number) => board[row]
 	const getColumn = (column: number) => board.map((row) => row[column])
 	const getGrid = (row: number, column: number) => {
