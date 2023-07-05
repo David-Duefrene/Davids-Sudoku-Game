@@ -25,11 +25,11 @@ const GridButton = function GridButton(props: GridButtonProps) {
 			position={{ row, column }}
 		/> :
 		<button
-			disabled={canChange}
+			disabled={!canChange}
 			onClick={() => setIsClicked(!isClicked)}
-			className='bg-fourth-color w-24 h-24'
+			className='bg-fourth-color w-24 h-24 disabled:opacity-50'
 			key={key} >
-			{board[row][column]}
+			{canChange ? null : board[row][column]}
 		</button>
 }
 
