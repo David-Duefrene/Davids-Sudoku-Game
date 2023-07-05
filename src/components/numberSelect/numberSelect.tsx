@@ -38,16 +38,18 @@ const NumberSelect = function (props: NumberSelectProps) {
 		return grid
 	}
 
-	const [pencilMode, setPencilMode] = useState<boolean>(true)
-	const [pencilValue, setPencilValue] = useState<Set<number>>(new Set())
+	const [ pencilMode, setPencilMode ] = useState<boolean>(true)
+	const [ pencilValue, setPencilValue ] = useState<Set<number>>(new Set())
 
-	const [unusableValues, setUnusableValues] = useState<Set<number>>(new Set([...getRow(row), ...getColumn(column), ...getGrid(row, column)]))
+	const [ unusableValues, setUnusableValues ] = useState<Set<number>>(
+		new Set([ ...getRow(row), ...getColumn(column), ...getGrid(row, column) ]),
+	)
 
 	useEffect(() => {
 		setUnusableValues(
-			new Set([...getRow(row), ...getColumn(column), ...getGrid(row, column)])
+			new Set([ ...getRow(row), ...getColumn(column), ...getGrid(row, column) ]),
 		)
-	}, [board, row, column])
+	}, [ board, row, column ])
 
 	const buttons = []
 	for (let i = 1; i <= 9; i++) {
@@ -72,8 +74,8 @@ const NumberSelect = function (props: NumberSelectProps) {
 					}
 					setPencilValue(new Set(pencilValue))
 				}} >
-					{i}
-			</button>
+				{i}
+			</button>,
 		)
 	}
 

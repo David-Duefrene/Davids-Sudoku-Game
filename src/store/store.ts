@@ -2,9 +2,9 @@ import { configureStore } from '@reduxjs/toolkit'
 import gameBoardSlice from './slices/gameBoardSlice'
 
 export const store = configureStore({
-  reducer: {
-    gameState: gameBoardSlice
-  }
+	reducer: {
+		gameState: gameBoardSlice,
+	},
 })
 
 export type RootState = ReturnType<typeof store.getState>
