@@ -13,7 +13,8 @@ const App = () => {
 					key={`${rowIndex}${columIndex}`}
 					row={rowIndex}
 					column={columIndex}
-					defaultValue={colum} />
+					hardValue={colum < 0}
+					value={Math.abs(colum)} />
 			)
 		})
 	})

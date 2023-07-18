@@ -22,8 +22,8 @@ const NumberSelect = function (props: NumberSelectProps) {
 	}
 
 	// TODO: Move to utils
-	const getRow = (row: number) => board[row]
-	const getColumn = (column: number) => board.map((row) => row[column])
+	const getRow = (row: number) => board[row].map((value) => Math.abs(value))
+	const getColumn = (column: number) => board.map((row) => Math.abs(row[column]))
 	const getGrid = (row: number, column: number) => {
 		const grid: number[] = []
 		const gridRow = Math.floor(row / 3) * 3
@@ -31,7 +31,7 @@ const NumberSelect = function (props: NumberSelectProps) {
 
 		for (let i = gridRow; i < gridRow +3; i++) {
 			for (let j = gridColumn; j < gridColumn +3; j++) {
-				grid.push(board[i][j])
+				grid.push(Math.abs(board[i][j]))
 			}
 		}
 
@@ -59,7 +59,7 @@ const NumberSelect = function (props: NumberSelectProps) {
 			<button
 				key={i}
 				className={hasIndex ? 'invert' : 'bg-second-color ' + 'disabled:opacity-50'}
-				disabled={unusableValues.has(i) && board[row][column] !== i}
+				disabled={unusableValues.has(i) && Math.abs(board[row][column]) !== i}
 				onClick={() => {
 					if (!pencilMode) {
 						setTile(row, column, i)

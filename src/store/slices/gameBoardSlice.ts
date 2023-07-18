@@ -7,7 +7,7 @@ export type IGameBoardState = { board: IGameBoard }
 export type ICoordinates = { row: number; column: number }
 
 // Constants
-const numArray = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+const numArray = [ -1, -2, -3, -4, -5, -6, -7, -8, -9 ]
 
 /* Local Helper Functions */
 // Grid Functions
