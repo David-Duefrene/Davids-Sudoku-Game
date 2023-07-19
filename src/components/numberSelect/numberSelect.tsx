@@ -1,19 +1,18 @@
-import { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
-import { RootState } from '../../store/store'
 import { setTile as setTileDis } from '../../store/slices/gameBoardSlice'
 
 type NumberSelectProps = {
 	position: { row: number, column: number }
+	value: number
+	unusableValues: Set<number>
 	close: () => void
 }
 
 const NumberSelect = function (props: NumberSelectProps) {
-	const { close, position } = props
+	const { value, unusableValues, close, position } = props
 	const { row, column } = position
-
-	const board = useSelector((state: RootState) => state.gameState.board)
 
 	const dispatch = useDispatch()
 
@@ -21,35 +20,8 @@ const NumberSelect = function (props: NumberSelectProps) {
 		dispatch(setTileDis({ row, column, value }))
 	}
 
-	// TODO: Move to utils
-	const getRow = (row: number) => board[row].map((value) => Math.abs(value))
-	const getColumn = (column: number) => board.map((row) => Math.abs(row[column]))
-	const getGrid = (row: number, column: number) => {
-		const grid: number[] = []
-		const gridRow = Math.floor(row / 3) * 3
-		const gridColumn = Math.floor(column / 3) * 3
-
-		for (let i = gridRow; i < gridRow +3; i++) {
-			for (let j = gridColumn; j < gridColumn +3; j++) {
-				grid.push(Math.abs(board[i][j]))
-			}
-		}
-
-		return grid
-	}
-
 	const [ pencilMode, setPencilMode ] = useState<boolean>(true)
 	const [ pencilValue, setPencilValue ] = useState<Set<number>>(new Set())
-
-	const [ unusableValues, setUnusableValues ] = useState<Set<number>>(
-		new Set([ ...getRow(row), ...getColumn(column), ...getGrid(row, column) ]),
-	)
-
-	useEffect(() => {
-		setUnusableValues(
-			new Set([ ...getRow(row), ...getColumn(column), ...getGrid(row, column) ]),
-		)
-	}, [ board, row, column ])
 
 	const buttons = []
 	for (let i = 1; i <= 9; i++) {
@@ -59,7 +31,7 @@ const NumberSelect = function (props: NumberSelectProps) {
 			<button
 				key={i}
 				className={hasIndex ? 'invert' : 'bg-second-color ' + 'disabled:opacity-50'}
-				disabled={unusableValues.has(i) && Math.abs(board[row][column]) !== i}
+				disabled={unusableValues.has(i) && value !== i}
 				onClick={() => {
 					if (!pencilMode) {
 						setTile(row, column, i)

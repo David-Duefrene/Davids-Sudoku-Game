@@ -2,8 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 // Types
-export type IGameBoard = number[][]
-export type IGameBoardState = { board: IGameBoard }
+export type IGameBoardState = { board: number[][] }
 export type ICoordinates = { row: number; column: number }
 
 // Constants
@@ -13,31 +12,35 @@ const numArray = [ -1, -2, -3, -4, -5, -6, -7, -8, -9 ]
 // Grid Functions
 
 // Returns a single row from the board
-const getRow = (row: number, board: IGameBoard) => board[row]
+const getRow = (row: number, board: number[][]) => board[row]
+export const absGetRow = (row: number, board: number[][]) => board[row].map((num) => Math.abs(num))
 
 // Returns a single column from the board
-const getColumn = (column: number, board: IGameBoard) => board.map((row) => row[column])
+const getColumn = (column: number, board: number[][]) => board.map((row) => row[column])
+export const absGetColumn = (column: number, board: number[][]) => board.map((row) => Math.abs(row[column]))
 
 // Returns a 3x3 grid from the board
-const getGrid = (row: number, column: number, board: IGameBoard) => {
+const getGrid = (row: number, column: number, board: number[][], abs = false) => {
 	const grid: number[] = []
 	const gridRow = Math.floor(row / 3) * 3
 	const gridColumn = Math.floor(column / 3) * 3
 
 	for (let i = gridRow; i < gridRow +3; i++) {
 		for (let j = gridColumn; j < gridColumn +3; j++) {
-			grid.push(board[i][j])
+			if (abs) grid.push(Math.abs(board[i][j]))
+			else grid.push(board[i][j])
 		}
 	}
 
 	return grid
 }
+export const absGetGrid = (row: number, column: number, board: number[][]) => getGrid(row, column, board, true)
 
 // Range Function - Generate a range of numbers from 0 to length
 const range = (length: number) => Array.from(Array(length).keys())
 
 // Get a list of all empty cells in the board from top-left to bottom-right
-const emptyCellCoords = (startingBoard: IGameBoard) => {
+const emptyCellCoords = (startingBoard: number[][]) => {
 	const listOfEmptyCells: ICoordinates[] = []
 
 	for (const row of range(8)) {
@@ -112,7 +115,7 @@ const fillPuzzle = (startingBoard = Array.from({ length: 9 }, () => Array(9).fil
 }
 
 // Find next empty cell
-const nextStillEmptyCell = (startingBoard: IGameBoard, emptyCellArray: ICoordinates[]) => {
+const nextStillEmptyCell = (startingBoard: number[][], emptyCellArray: ICoordinates[]) => {
 	for (const coord of emptyCellArray) {
 		const { row, column } = coord
 
@@ -122,7 +125,7 @@ const nextStillEmptyCell = (startingBoard: IGameBoard, emptyCellArray: ICoordina
 }
 
 // Attempts to solve the puzzle by placing values into the board via the emptyCellArray
-const fillFromArray = (startingBoard: IGameBoard, emptyCellArray: ICoordinates[]) => {
+const fillFromArray = (startingBoard: number[][], emptyCellArray: ICoordinates[]) => {
 	const emptyCell = nextStillEmptyCell(startingBoard, emptyCellArray)
 	let pokeCounter = 0
 
@@ -142,7 +145,7 @@ const fillFromArray = (startingBoard: IGameBoard, emptyCellArray: ICoordinates[]
 }
 
 // Check if there are multiple possible solutions
-const multiplePossibleSolutions = (boardToCheck: IGameBoard) => {
+const multiplePossibleSolutions = (boardToCheck: number[][]) => {
 	const possibleSolutions = []
 	const emptyCellArray = emptyCellCoords(boardToCheck)
 	for (let index = 0; index < emptyCellArray.length; index++) {
@@ -161,7 +164,7 @@ const multiplePossibleSolutions = (boardToCheck: IGameBoard) => {
 }
 
 // Makes empty tiles on the board
-const pokeHoles = (startingBoard: IGameBoard, holes: number) => {
+const pokeHoles = (startingBoard: number[][], holes: number) => {
 	const removedValues = []
 
 	while (removedValues.length < holes) {
@@ -190,7 +193,7 @@ const pokeHoles = (startingBoard: IGameBoard, holes: number) => {
 }
 
 // Force Generate a Board
-const forceGenerate = (): IGameBoard => {
+const forceGenerate = (): number[][] => {
 	const board = fillPuzzle()
 	if (board) return pokeHoles(board, 40)
 	return forceGenerate()

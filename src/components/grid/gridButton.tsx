@@ -6,19 +6,22 @@ type GridButtonProps = {
 	key?: string
 	value: number
 	hardValue?: boolean
+	unusableValues: Set<number>
 	row: number
 	column: number
 }
 
 const GridButton = function GridButton(props: GridButtonProps) {
 	const {
-		key, value, row, column, hardValue = false,
+		key, value, row, column, unusableValues, hardValue = false,
 	} = props
 
 	const [ isClicked, setIsClicked ] = useState<boolean>(value === 0)
 
 	return isClicked ?
 		<NumberSelect
+			value={value}
+			unusableValues={unusableValues}
 			close={() => setIsClicked(false)}
 			position={{ row, column }}
 		/> :
