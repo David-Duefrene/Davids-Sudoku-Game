@@ -1,11 +1,13 @@
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import GridButton from '../components/grid/gridButton'
+
 import { RootState } from '../store/store'
 import { absGetColumn, absGetGrid, absGetRow } from '../store/slices/gameBoardSlice'
 
 const App = () => {
 	const gameState = useSelector((state: RootState) => state.gameState.board)
+	const dispatch = useDispatch()
 
 	const tiles = gameState.map((row, rowIndex) => {
 		return row.map((colum, columIndex) => {
@@ -19,9 +21,8 @@ const App = () => {
 				<GridButton
 					key={`${rowIndex}${columIndex}`}
 					unusableValues={unusableValues}
-					row={rowIndex}
-					column={columIndex}
 					hardValue={colum < 0}
+					setTile={(value: number) => dispatch({ type: 'gameState/setTile', payload: { row: rowIndex, column: columIndex, value } })}
 					value={Math.abs(colum)} />
 			)
 		})

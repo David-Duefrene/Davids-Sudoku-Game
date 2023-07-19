@@ -1,24 +1,14 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-
-import { setTile as setTileDis } from '../../store/slices/gameBoardSlice'
 
 type NumberSelectProps = {
-	position: { row: number, column: number }
 	value: number
 	unusableValues: Set<number>
 	close: () => void
+	setTile: (value: number) => void
 }
 
 const NumberSelect = function (props: NumberSelectProps) {
-	const { value, unusableValues, close, position } = props
-	const { row, column } = position
-
-	const dispatch = useDispatch()
-
-	const setTile = (row: number, column: number, value: number) => {
-		dispatch(setTileDis({ row, column, value }))
-	}
+	const { value, unusableValues, close, setTile } = props
 
 	const [ pencilMode, setPencilMode ] = useState<boolean>(true)
 	const [ pencilValue, setPencilValue ] = useState<Set<number>>(new Set())
@@ -34,7 +24,7 @@ const NumberSelect = function (props: NumberSelectProps) {
 				disabled={unusableValues.has(i) && value !== i}
 				onClick={() => {
 					if (!pencilMode) {
-						setTile(row, column, i)
+						setTile(i)
 						close()
 						return
 					}
