@@ -10,31 +10,53 @@ const numArray = [ -1, -2, -3, -4, -5, -6, -7, -8, -9 ]
 
 /* Local Helper Functions */
 // Grid Functions
+type ITile = { value: number | null, immutable: boolean }
+
+// Check if tile is a tile
+const isTile = (tile: number | ITile): tile is ITile => {
+	return tile !== null && typeof tile === 'object' && 'value' in tile
+}
 
 // Returns a single row from the board
-const getRow = (row: number, board: number[][]) => board[row]
-export const absGetRow = (row: number, board: number[][]) => board[row].map((num) => Math.abs(num))
+export const getRow = (row: number, board: ITile[][] | number[][]) => {
+	const result = []
+	for (const tile of board[row]) {
+		if (isTile(tile)) {
+			if (tile.value !== null) result.push(tile.value)
+		} else result.push(tile)
+	}
+	return result
+}
 
 // Returns a single column from the board
-const getColumn = (column: number, board: number[][]) => board.map((row) => row[column])
-export const absGetColumn = (column: number, board: number[][]) => board.map((row) => Math.abs(row[column]))
+export const getColumn = (column: number, board: ITile[][] | number[][]) => {
+	const result = []
+	for (const row of board) {
+		const tile = row[column]
+		if (isTile(tile)) {
+			if (tile.value !== null) result.push(tile.value)
+		} else result.push(tile)
+	}
+	return result
+}
 
 // Returns a 3x3 grid from the board
-const getGrid = (row: number, column: number, board: number[][], abs = false) => {
-	const grid: number[] = []
+export const getGrid = (row: number, column: number, board: ITile[][] | number[][]) => {
+	const grid = []
 	const gridRow = Math.floor(row / 3) * 3
 	const gridColumn = Math.floor(column / 3) * 3
 
 	for (let i = gridRow; i < gridRow +3; i++) {
 		for (let j = gridColumn; j < gridColumn +3; j++) {
-			if (abs) grid.push(Math.abs(board[i][j]))
-			else grid.push(board[i][j])
+			const tile = board[i][j]
+			if (isTile(tile)) {
+				if (tile.value !== null) grid.push(tile.value)
+			} else grid.push(tile)
 		}
 	}
 
 	return grid
 }
-export const absGetGrid = (row: number, column: number, board: number[][]) => getGrid(row, column, board, true)
 
 // Range Function - Generate a range of numbers from 0 to length
 const range = (length: number) => Array.from(Array(length).keys())
@@ -189,17 +211,22 @@ const pokeHoles = (startingBoard: number[][], holes: number) => {
 		}
 	}
 
-	return startingBoard
+	return startingBoard.map((row) => row.map((num) => {
+		return {
+			value: num === 0 ? null : Math.abs(num),
+			immutable: num < 0,
+		}
+	}))
 }
 
 // Force Generate a Board
-const forceGenerate = (): number[][] => {
+const forceGenerate = (): ITile[][] => {
 	const board = fillPuzzle()
 	if (board) return pokeHoles(board, 40)
 	return forceGenerate()
 }
 
-const initialState: IGameBoardState = {
+const initialState: { board: ITile[][]} = {
 	board: forceGenerate(),
 }
 
@@ -212,7 +239,7 @@ export const gameBoardSlice = createSlice({
 
 			const updatedBoard = state.board.map((rowArr) => [ ...rowArr ])
 
-			updatedBoard[row][column] = value
+			updatedBoard[row][column] = { value, immutable: false }
 
 			return {
 				...state,

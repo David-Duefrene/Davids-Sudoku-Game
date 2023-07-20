@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 type NumberSelectProps = {
-	value: number
+	value: number | null
 	unusableValues: Set<number>
 	close: () => void
 	setTile: (value: number) => void
@@ -20,7 +20,7 @@ const NumberSelect = function (props: NumberSelectProps) {
 		buttons.push(
 			<button
 				key={i}
-				className={hasIndex ? 'invert' : 'bg-second-color ' + 'disabled:opacity-50'}
+				className={hasIndex ? 'invert' : 'bg-second-color disabled:opacity-50'}
 				disabled={unusableValues.has(i) && value !== i}
 				onClick={() => {
 					if (!pencilMode) {

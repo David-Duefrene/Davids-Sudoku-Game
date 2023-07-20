@@ -4,8 +4,8 @@ import NumberSelect from '../numberSelect/numberSelect'
 
 type GridButtonProps = {
 	key?: string
-	value: number
-	hardValue?: boolean
+	value: number | null
+	hardValue: boolean
 	unusableValues: Set<number>
 	setTile: (value: number) => void
 }
@@ -15,7 +15,7 @@ const GridButton = function GridButton(props: GridButtonProps) {
 		key, value, unusableValues, setTile, hardValue = false,
 	} = props
 
-	const [ isClicked, setIsClicked ] = useState<boolean>(value === 0)
+	const [ isClicked, setIsClicked ] = useState<boolean>(!hardValue)
 
 	return isClicked ?
 		<NumberSelect
@@ -29,7 +29,7 @@ const GridButton = function GridButton(props: GridButtonProps) {
 			onClick={() => setIsClicked(!isClicked)}
 			className={`${hardValue? 'bg-slate-500' : 'bg-fourth-color'} w-24 h-24 disabled:opacity-50`}
 			key={key} >
-			{value === 0 ? null : value}
+			{value}
 		</button>
 }
 
