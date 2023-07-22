@@ -1,19 +1,29 @@
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import GridButton from '../components/grid/gridButton'
+
 import { RootState } from '../store/store'
+import { getColumn, getGrid, getRow } from '../store/slices/gameBoardSlice'
 
 const App = () => {
 	const gameState = useSelector((state: RootState) => state.gameState.board)
+	const dispatch = useDispatch()
 
 	const tiles = gameState.map((row, rowIndex) => {
 		return row.map((colum, columIndex) => {
+			const unusableValues = new Set([
+				...getRow(rowIndex, gameState),
+				...getColumn(columIndex, gameState),
+				...getGrid(rowIndex, columIndex, gameState),
+			])
+
 			return (
 				<GridButton
 					key={`${rowIndex}${columIndex}`}
-					row={rowIndex}
-					column={columIndex}
-					defaultValue={colum} />
+					unusableValues={unusableValues}
+					hardValue={colum.immutable}
+					setTile={(value: number) => dispatch({ type: 'gameState/setTile', payload: { row: rowIndex, column: columIndex, value } })}
+					value={colum.value} />
 			)
 		})
 	})

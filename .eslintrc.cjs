@@ -11,11 +11,15 @@ module.exports = {
 	parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
 	plugins: [ 'react-refresh' ],
 	rules: {
+		// TypeScript
 		'@typescript-eslint/no-explicit-any': 'error',
-		'react/react-in-jsx-scope': 0,
+		// JavaScript
+		'implicit-arrow-linebreak': 'off',
 		'object-curly-newline': [ 'error', {
 			'minProperties': 5, 'multiline': true, 'consistent': true,
 		} ],
+		// React
+		'react/react-in-jsx-scope': 'off',
 		'react-refresh/only-export-components': 'warn',
 	},
 }

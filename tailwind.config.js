@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import colors from 'tailwindcss/colors'
+
 export default {
 	content: [
 		'./index.html',
@@ -7,6 +9,7 @@ export default {
 	theme: {
 		extend: {},
 		colors: {
+			...colors,
 			transparent: 'transparent',
 			current: 'currentColor',
 			'first-color': 'hsla(96, 40%, 74%, 0.9)',

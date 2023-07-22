@@ -1,35 +1,35 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import NumberSelect from '../numberSelect/numberSelect'
-import { RootState } from '../../store/store'
 
 type GridButtonProps = {
 	key?: string
-	defaultValue?: number
-	row: number
-	column: number
+	value: number | null
+	hardValue: boolean
+	unusableValues: Set<number>
+	setTile: (value: number) => void
 }
 
 const GridButton = function GridButton(props: GridButtonProps) {
-	const { key, defaultValue, row, column } = props
+	const {
+		key, value, unusableValues, setTile, hardValue = false,
+	} = props
 
-	const board = useSelector((state: RootState) => state.gameState.board)
-
-	const canChange = defaultValue === 0
-	const [ isClicked, setIsClicked ] = useState<boolean>(canChange)
+	const [ isClicked, setIsClicked ] = useState<boolean>(!hardValue)
 
 	return isClicked ?
 		<NumberSelect
+			value={value}
+			unusableValues={unusableValues}
+			setTile={setTile}
 			close={() => setIsClicked(false)}
-			position={{ row, column }}
 		/> :
 		<button
-			disabled={!canChange}
+			disabled={hardValue}
 			onClick={() => setIsClicked(!isClicked)}
-			className='bg-fourth-color w-24 h-24 disabled:opacity-50'
+			className={`${hardValue? 'bg-slate-500' : 'bg-fourth-color'} w-24 h-24 disabled:opacity-50`}
 			key={key} >
-			{canChange ? null : board[row][column]}
+			{value}
 		</button>
 }
 
