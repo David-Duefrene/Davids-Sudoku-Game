@@ -6,7 +6,7 @@ export type IGameBoardState = { board: ITile[][] }
 export type ICoordinates = { row: number; column: number }
 
 // Constants
-const numArray = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+const numArray = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 /* Local Helper Functions */
 // Grid Functions
@@ -38,8 +38,8 @@ export const getGrid: FGetGrid = (row, column, board) => {
 	const gridRow = Math.floor(row / 3) * 3
 	const gridColumn = Math.floor(column / 3) * 3
 
-	for (let i = gridRow; i < gridRow +3; i++) {
-		for (let j = gridColumn; j < gridColumn +3; j++) {
+	for (let i = gridRow; i < gridRow + 3; i++) {
+		for (let j = gridColumn; j < gridColumn + 3; j++) {
 			const tile = board[i][j]
 			if (tile.value !== null) grid.push(tile.value)
 		}
@@ -167,7 +167,7 @@ const multiplePossibleSolutions = (boardToCheck: ITile[][]): boolean => {
 	const emptyCellArray = emptyCellCoords(boardToCheck)
 	for (let index = 0; index < emptyCellArray.length; index++) {
 		// Rotate a clone of the emptyCellArray by one for each iteration
-		const emptyCellClone = [ ...emptyCellArray ]
+		const emptyCellClone = [...emptyCellArray]
 		const startingPoint = emptyCellClone.splice(index, 1)
 
 		emptyCellClone.unshift(startingPoint[0])
@@ -221,8 +221,19 @@ const forceGenerate = (): ITile[][] => {
 	return forceGenerate()
 }
 
-const initialState: { board: ITile[][]} = {
+const initialState: { board: ITile[][], isSolved: boolean } = {
 	board: forceGenerate(),
+	isSolved: false,
+}
+
+// Checks if the board is solved
+const checkIfSolved = (board: ITile[][]): boolean => {
+	for (const row of board) {
+		for (const tile of row) {
+			if (tile.value === null) return false
+		}
+	}
+	return true
 }
 
 export const gameBoardSlice = createSlice({
@@ -232,13 +243,14 @@ export const gameBoardSlice = createSlice({
 		setTile: (state, action) => {
 			const { row, column, value } = action.payload
 
-			const updatedBoard = state.board.map((rowArr) => [ ...rowArr ])
+			const updatedBoard = state.board.map((rowArr) => [...rowArr])
 
 			updatedBoard[row][column] = { value, immutable: false }
 
 			return {
 				...state,
 				board: updatedBoard,
+				isSolved: checkIfSolved(updatedBoard)
 			}
 		},
 	},
