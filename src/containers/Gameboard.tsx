@@ -1,12 +1,14 @@
 import { useSelector, useDispatch } from 'react-redux'
 
 import GridButton from '../components/grid/gridButton'
+import Winner from '../components/PopUps/Winner/Winner'
 
 import { RootState } from '../store/store'
 import { getColumn, getGrid, getRow } from '../store/slices/gameBoardSlice'
 
 const App = () => {
 	const gameState = useSelector((state: RootState) => state.gameState.board)
+	const isSolved = useSelector((state: RootState) => state.gameState.isSolved)
 	const dispatch = useDispatch()
 
 	const tiles = gameState.map((row, rowIndex) => {
@@ -22,14 +24,21 @@ const App = () => {
 					key={`${rowIndex}${columIndex}`}
 					unusableValues={unusableValues}
 					hardValue={colum.immutable}
-					setTile={(value: number) => dispatch({ type: 'gameState/setTile', payload: { row: rowIndex, column: columIndex, value } })}
-					value={colum.value} />
+					setTile={(value: number) =>
+						dispatch({
+							type: 'gameState/setTile',
+							payload: { row: rowIndex, column: columIndex, value },
+						})
+					}
+					value={colum.value}
+				/>
 			)
 		})
 	})
 
 	return (
 		<>
+			<Winner isOpen={isSolved} />
 			<h1 className='leading-5 text-5xl text-center'>Sudoku</h1>
 			<div className='grid grid-cols-9 gap-2'>{tiles}</div>
 		</>
