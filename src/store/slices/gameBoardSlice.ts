@@ -1,25 +1,17 @@
 // Imports
 import { createSlice } from '@reduxjs/toolkit'
 
+import { getRow, ITile } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
+
 // Types
-export type IGameBoardState = { board: ITile[][] };
-export type ICoordinates = { row: number; column: number };
+export type IGameBoardState = { board: ITile[][] }
+export type ICoordinates = { row: number; column: number }
 
 // Constants
 const numArray = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
 
 /* Local Helper Functions */
 // Grid Functions
-type ITile = { value: number | null; immutable: boolean };
-
-// Returns a single row from the board
-export const getRow = (row: number, board: ITile[][]): number[] => {
-	const result: number[] = []
-	for (const tile of board[row]) {
-		if (tile.value !== null) result.push(tile.value)
-	}
-	return result
-}
 
 // Returns a single column from the board
 export const getColumn = (column: number, board: ITile[][]): number[] => {
@@ -32,7 +24,7 @@ export const getColumn = (column: number, board: ITile[][]): number[] => {
 }
 
 // Returns a 3x3 grid from the board
-type FGetGrid = (row: number, column: number, board: ITile[][]) => number[];
+type FGetGrid = (row: number, column: number, board: ITile[][]) => number[]
 export const getGrid: FGetGrid = (row, column, board) => {
 	const grid: number[] = []
 	const gridRow = Math.floor(row / 3) * 3
@@ -57,9 +49,7 @@ const emptyCellCoords = (startingBoard: ITile[][]): ICoordinates[] => {
 
 	for (const row of range(9)) {
 		for (const column of range(9)) {
-			if (startingBoard[row][column] === null) {
-				listOfEmptyCells.push({ row, column })
-			}
+			if (startingBoard[row][column] === null) listOfEmptyCells.push({ row, column })
 		}
 	}
 
@@ -87,11 +77,7 @@ const shuffle = (array: number[]): number[] => {
 }
 
 // Check if number is safe to place
-type FSafeToPlace = (
-  board: ITile[][],
-  emptyCell: ICoordinates,
-  num: number
-) => boolean;
+type FSafeToPlace = (board: ITile[][], emptyCell: ICoordinates, num: number) => boolean
 const safeToPlace: FSafeToPlace = (board, emptyCell, num) => {
 	const row = getRow(emptyCell.row, board)
 	const column = getColumn(emptyCell.column, board)
@@ -114,12 +100,8 @@ const nextEmptyCell = (board: ITile[][]): ICoordinates | null => {
 
 // Fill the puzzle
 let counter = 0
-const starterArray = Array.from({ length: 9 }, () =>
-	Array(9)
-		.fill(null)
-		.map(() => ({ value: null, immutable: true })),
-)
-type FFillPuzzle = (startingBoard?: ITile[][]) => ITile[][] | false;
+const starterArray = Array.from({ length: 9 }, () => Array(9).fill(null).map(() => ({ value: null, immutable: true })))
+type FFillPuzzle = (startingBoard?: ITile[][]) => ITile[][] | false
 const fillPuzzle: FFillPuzzle = (startingBoard = starterArray) => {
 	const emptyCell = nextEmptyCell(startingBoard)
 
@@ -141,14 +123,8 @@ const fillPuzzle: FFillPuzzle = (startingBoard = starterArray) => {
 }
 
 // Find next empty cell
-type FNextStillEmptyCell = (
-  startingBoard: ITile[][],
-  emptyCellArray: ICoordinates[]
-) => ICoordinates | false;
-const nextStillEmptyCell: FNextStillEmptyCell = (
-	startingBoard,
-	emptyCellArray,
-) => {
+type FNextStillEmptyCell = (startingBoard: ITile[][], emptyCellArray: ICoordinates[]) => ICoordinates | false
+const nextStillEmptyCell: FNextStillEmptyCell = (startingBoard, emptyCellArray) => {
 	for (const coord of emptyCellArray) {
 		const { row, column } = coord
 
@@ -158,10 +134,7 @@ const nextStillEmptyCell: FNextStillEmptyCell = (
 }
 
 // Attempts to solve the puzzle by placing values into the board via the emptyCellArray
-const fillFromArray = (
-	startingBoard: ITile[][],
-	emptyCellArray: ICoordinates[],
-): ITile[][] | false => {
+const fillFromArray = (startingBoard: ITile[][], emptyCellArray: ICoordinates[]): ITile[][] | false => {
 	const emptyCell = nextStillEmptyCell(startingBoard, emptyCellArray)
 	let pokeCounter = 0
 
@@ -190,10 +163,7 @@ const multiplePossibleSolutions = (boardToCheck: ITile[][]): boolean => {
 		const startingPoint = emptyCellClone.splice(index, 1)
 
 		emptyCellClone.unshift(startingPoint[0])
-		const thisSolution = fillFromArray(
-			boardToCheck.map((row) => row.slice()),
-			emptyCellClone,
-		)
+		const thisSolution = fillFromArray(boardToCheck.map((row) => row.slice()), emptyCellClone)
 
 		if (!thisSolution) return false
 		possibleSolutions.push(thisSolution.join())
@@ -204,11 +174,7 @@ const multiplePossibleSolutions = (boardToCheck: ITile[][]): boolean => {
 
 // Makes empty tiles on the board
 const pokeHoles = (startingBoard: ITile[][], holes: number): ITile[][] => {
-	const removedValues: {
-    rowIndex: number;
-    colIndex: number;
-    val: number | null;
-  }[] = []
+	const removedValues: { rowIndex: number; colIndex: number; val: number | null }[] = []
 
 	while (removedValues.length < holes) {
 		const val = Math.floor(Math.random() * 81)
@@ -247,7 +213,7 @@ const forceGenerate = (): ITile[][] => {
 	return forceGenerate()
 }
 
-const initialState: { board: ITile[][]; isSolved: boolean } = {
+const initialState: { board: ITile[][], isSolved: boolean } = {
 	board: forceGenerate(),
 	isSolved: false,
 }
