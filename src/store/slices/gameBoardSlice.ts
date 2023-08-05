@@ -1,7 +1,7 @@
 // Imports
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getRow, ITile } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
+import { getRow, getColumn, ITile } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
 
 // Types
 export type IGameBoardState = { board: ITile[][] }
@@ -12,16 +12,6 @@ const numArray = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
 
 /* Local Helper Functions */
 // Grid Functions
-
-// Returns a single column from the board
-export const getColumn = (column: number, board: ITile[][]): number[] => {
-	const result: number[] = []
-	for (const row of board) {
-		const tile = row[column]
-		if (tile.value !== null) result.push(tile.value)
-	}
-	return result
-}
 
 // Returns a 3x3 grid from the board
 type FGetGrid = (row: number, column: number, board: ITile[][]) => number[]

@@ -10,3 +10,13 @@ export const getRow = (row: number, board: ITile[][]): number[] => {
 	}
 	return result
 }
+
+// Returns a single column from the board
+export const getColumn = (column: number, board: ITile[][]): number[] => {
+	const result: number[] = []
+	for (const row of board) {
+		const tile = row[column]
+		if (tile.value !== null) result.push(tile.value)
+	}
+	return result
+}
