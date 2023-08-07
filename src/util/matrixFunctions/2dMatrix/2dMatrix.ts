@@ -1,4 +1,7 @@
-export type ITile = { value: number | null; immutable: boolean };
+export type ITile = {
+	value: number | null
+	immutable: boolean
+}
 
 // Returns a single row from the board
 export const getRow = (row: number, board: ITile[][]): number[] => {
@@ -20,3 +23,21 @@ export const getColumn = (column: number, board: ITile[][]): number[] => {
 	}
 	return result
 }
+
+// Returns a 3x3 grid from the board
+type FGetGrid = (row: number, column: number, board: ITile[][]) => number[]
+export const getGrid: FGetGrid = (row, column, board) => {
+	const grid: number[] = []
+	const gridRow = Math.floor(row / 3) * 3
+	const gridColumn = Math.floor(column / 3) * 3
+
+	for (let i = gridRow; i < gridRow + 3; i++) {
+		for (let j = gridColumn; j < gridColumn + 3; j++) {
+			const tile = board[i][j]
+			if (tile.value !== null) grid.push(tile.value)
+		}
+	}
+
+	return grid
+}
+

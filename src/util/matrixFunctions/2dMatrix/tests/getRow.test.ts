@@ -10,7 +10,7 @@ const testBoard: ITile[][] = [
 		{ value: 3, immutable: true },
 	],
 	[
-		{ value: 4, immutable: true },
+		{ value: null, immutable: true },
 		{ value: 5, immutable: true },
 		{ value: 6, immutable: true },
 	],
@@ -24,7 +24,7 @@ describe('getRow', () => {
 
 		// Test for the second row (index 1)
 		const row1Result = getRow(1, testBoard)
-		expect(row1Result).toEqual([ 4, 5, 6 ])
+		expect(row1Result).toEqual([ 5, 6 ])
 	})
 
 	it('should return an empty array if the row is out of bounds', () => {
