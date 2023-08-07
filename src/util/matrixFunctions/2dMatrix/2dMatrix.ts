@@ -1,7 +1,10 @@
+import { range } from '../../arrayFunctions/array'
+
 export type ITile = {
 	value: number | null
 	immutable: boolean
 }
+export type ICoordinates = { row: number; column: number }
 
 // Returns a single row from the board
 export const getRow = (row: number, board: ITile[][]): number[] => {
@@ -39,5 +42,20 @@ export const getGrid: FGetGrid = (row, column, board) => {
 	}
 
 	return grid
+}
+
+// Get a list of all empty cells in the board from top-left to bottom-right
+export const emptyCellCoords = (startingBoard: ITile[][]): ICoordinates[] => {
+	const listOfEmptyCells: ICoordinates[] = []
+
+	for (const row of range(9)) {
+		for (const column of range(9)) {
+			if (startingBoard[row][column] === null) {
+				listOfEmptyCells.push({ row, column })
+			}
+		}
+	}
+
+	return listOfEmptyCells
 }
 

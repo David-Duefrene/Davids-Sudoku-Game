@@ -1,33 +1,18 @@
 // Imports
 import { createSlice } from '@reduxjs/toolkit'
 
-import { range } from '../../util/arrayFunctions/array'
-import { getRow, getColumn, getGrid, ITile } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
+import {
+	getRow, getColumn, getGrid, emptyCellCoords, ITile, ICoordinates,
+} from '../../util/matrixFunctions/2dMatrix/2dMatrix'
 
 // Types
 export type IGameBoardState = { board: ITile[][] }
-export type ICoordinates = { row: number; column: number }
 
 // Constants
 const numArray = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
 
 /* Local Helper Functions */
 // Grid Functions
-
-// Get a list of all empty cells in the board from top-left to bottom-right
-const emptyCellCoords = (startingBoard: ITile[][]): ICoordinates[] => {
-	const listOfEmptyCells: ICoordinates[] = []
-
-	for (const row of range(9)) {
-		for (const column of range(9)) {
-			if (startingBoard[row][column] === null) {
-				listOfEmptyCells.push({ row, column })
-			}
-		}
-	}
-
-	return listOfEmptyCells
-}
 
 // Shuffle an Array
 const shuffle = (array: number[]): number[] => {
