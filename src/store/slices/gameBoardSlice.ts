@@ -1,6 +1,7 @@
 // Imports
 import { createSlice } from '@reduxjs/toolkit'
 
+import { range } from '../../util/arrayFunctions/array'
 import { getRow, getColumn, getGrid, ITile } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
 
 // Types
@@ -12,9 +13,6 @@ const numArray = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
 
 /* Local Helper Functions */
 // Grid Functions
-
-// Range Function - Generate a range of numbers from 0 to length
-const range = (length: number) => Array.from(Array(length).keys())
 
 // Get a list of all empty cells in the board from top-left to bottom-right
 const emptyCellCoords = (startingBoard: ITile[][]): ICoordinates[] => {
