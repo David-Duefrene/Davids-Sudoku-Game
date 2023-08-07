@@ -2,8 +2,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import {
-	getRow, getColumn, getGrid, emptyCellCoords, ITile, ICoordinates,
+	getRow, getColumn, getGrid, emptyCellCoords,
+	ITile, ICoordinates,
 } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
+import { shuffle } from '../../util/arrayFunctions/array'
 
 // Types
 export type IGameBoardState = { board: ITile[][] }
@@ -13,26 +15,6 @@ const numArray = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
 
 /* Local Helper Functions */
 // Grid Functions
-
-// Shuffle an Array
-const shuffle = (array: number[]): number[] => {
-	let currentIndex = array.length
-	let temporaryValue: number, randomIndex: number
-
-	// While there remain elements to shuffle...
-	while (0 !== currentIndex) {
-		// Pick a remaining element...
-		randomIndex = Math.floor(Math.random() * currentIndex)
-		currentIndex--
-
-		// And swap it with the current element.
-		temporaryValue = array[currentIndex]
-		array[currentIndex] = array[randomIndex]
-		array[randomIndex] = temporaryValue
-	}
-
-	return array
-}
 
 // Check if number is safe to place
 type FSafeToPlace = (
