@@ -1,10 +1,8 @@
 // Imports
 import { createSlice } from '@reduxjs/toolkit'
 
-import {
-	getRow, getColumn, getGrid, emptyCellCoords,
-	ITile, ICoordinates,
-} from '../../util/matrixFunctions/2dMatrix/2dMatrix'
+import { emptyCellCoords, safeToPlace } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
+import type { ITile, ICoordinates } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
 import { shuffle } from '../../util/arrayFunctions/array'
 
 // Types
@@ -15,20 +13,6 @@ const numArray = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
 
 /* Local Helper Functions */
 // Grid Functions
-
-// Check if number is safe to place
-type FSafeToPlace = (
-	board: ITile[][],
-	emptyCell: ICoordinates,
-	num: number
-) => boolean
-const safeToPlace: FSafeToPlace = (board, emptyCell, num) => {
-	const row = getRow(emptyCell.row, board)
-	const column = getColumn(emptyCell.column, board)
-	const grid = getGrid(emptyCell.row, emptyCell.column, board)
-
-	return !row.includes(num) && !column.includes(num) && !grid.includes(num)
-}
 
 // Find next empty cell
 const nextEmptyCell = (board: ITile[][]): ICoordinates | null => {

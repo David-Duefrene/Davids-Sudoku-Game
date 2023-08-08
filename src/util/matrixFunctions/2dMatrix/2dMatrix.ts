@@ -59,3 +59,17 @@ export const emptyCellCoords = (startingBoard: ITile[][]): ICoordinates[] => {
 	return listOfEmptyCells
 }
 
+// Check if number is safe to place
+type FSafeToPlace = (
+	board: ITile[][],
+	emptyCell: ICoordinates,
+	num: number
+) => boolean
+export const safeToPlace: FSafeToPlace = (board, emptyCell, num) => {
+	const row = getRow(emptyCell.row, board)
+	const column = getColumn(emptyCell.column, board)
+	const grid = getGrid(emptyCell.row, emptyCell.column, board)
+
+	return !row.includes(num) && !column.includes(num) && !grid.includes(num)
+}
+
