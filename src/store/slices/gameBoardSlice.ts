@@ -1,7 +1,9 @@
 // Imports
 import { createSlice } from '@reduxjs/toolkit'
 
-import { emptyCellCoords, safeToPlace, fillPuzzle } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
+import {
+	emptyCellCoords, safeToPlace, fillPuzzle, nextStillEmptyCell,
+} from '../../util/matrixFunctions/2dMatrix/2dMatrix'
 import type { ITile, ICoordinates } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
 import { shuffle } from '../../util/arrayFunctions/array'
 
@@ -9,27 +11,10 @@ import { shuffle } from '../../util/arrayFunctions/array'
 export type IGameBoardState = { board: ITile[][] }
 
 // Constants
-const numArray = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+const numArray = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
 
 /* Local Helper Functions */
 // Grid Functions
-
-// Find next empty cell
-type FNextStillEmptyCell = (
-	startingBoard: ITile[][],
-	emptyCellArray: ICoordinates[]
-) => ICoordinates | false
-const nextStillEmptyCell: FNextStillEmptyCell = (
-	startingBoard,
-	emptyCellArray,
-) => {
-	for (const coord of emptyCellArray) {
-		const { row, column } = coord
-
-		if (startingBoard[row][column].value === null) return { row, column }
-	}
-	return false
-}
 
 // Attempts to solve the puzzle by placing values into the board via the emptyCellArray
 const fillFromArray = (
@@ -60,7 +45,7 @@ const multiplePossibleSolutions = (boardToCheck: ITile[][]): boolean => {
 	const emptyCellArray = emptyCellCoords(boardToCheck)
 	for (let index = 0; index < emptyCellArray.length; index++) {
 		// Rotate a clone of the emptyCellArray by one for each iteration
-		const emptyCellClone = [...emptyCellArray]
+		const emptyCellClone = [ ...emptyCellArray ]
 		const startingPoint = emptyCellClone.splice(index, 1)
 
 		emptyCellClone.unshift(startingPoint[0])
@@ -143,7 +128,7 @@ export const gameBoardSlice = createSlice({
 		setTile: (state, action) => {
 			const { row, column, value } = action.payload
 
-			const updatedBoard = state.board.map((rowArr) => [...rowArr])
+			const updatedBoard = state.board.map((rowArr) => [ ...rowArr ])
 
 			updatedBoard[row][column] = { value, immutable: false }
 

@@ -1,6 +1,4 @@
-import {
-	vi, describe, it, expect,
-} from 'vitest'
+import { vi, describe, it, expect } from 'vitest'
 import validResult from './result.json'
 import { fillPuzzle } from '../2dMatrix'
 

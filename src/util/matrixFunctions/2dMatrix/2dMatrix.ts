@@ -118,3 +118,14 @@ export const fillPuzzle: FFillPuzzle = (startingBoard = starterArray) => {
 	return false
 }
 
+// Find next empty cell
+type FNextStillEmptyCell = (startingBoard: ITile[][], emptyCellArray: ICoordinates[]) => ICoordinates | false
+export const nextStillEmptyCell: FNextStillEmptyCell = (startingBoard, emptyCellArray) => {
+	for (const coord of emptyCellArray) {
+		const { row, column } = coord
+
+		if (startingBoard[row][column].value === null) return { row, column }
+	}
+	return false
+}
+
