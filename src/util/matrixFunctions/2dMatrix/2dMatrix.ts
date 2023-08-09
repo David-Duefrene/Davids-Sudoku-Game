@@ -76,3 +76,15 @@ export const safeToPlace: FSafeToPlace = (board, emptyCell, num) => {
 	return !row.includes(num) && !column.includes(num) && !grid.includes(num)
 }
 
+// Find next empty cell
+export const nextEmptyCell = (board: ITile[][]): ICoordinates | null => {
+	for (let row = 0; row < 9; row++) {
+		for (let column = 0; column < 9; column++) {
+			if (board[row][column].value === null) {
+				return { row, column }
+			}
+		}
+	}
+	return null
+}
+

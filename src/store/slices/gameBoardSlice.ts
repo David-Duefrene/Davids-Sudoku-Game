@@ -1,7 +1,7 @@
 // Imports
 import { createSlice } from '@reduxjs/toolkit'
 
-import { emptyCellCoords, safeToPlace } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
+import { emptyCellCoords, safeToPlace, nextEmptyCell } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
 import type { ITile, ICoordinates } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
 import { shuffle } from '../../util/arrayFunctions/array'
 
@@ -13,18 +13,6 @@ const numArray = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
 
 /* Local Helper Functions */
 // Grid Functions
-
-// Find next empty cell
-const nextEmptyCell = (board: ITile[][]): ICoordinates | null => {
-	for (let row = 0; row < 9; row++) {
-		for (let column = 0; column < 9; column++) {
-			if (board[row][column].value === null) {
-				return { row, column }
-			}
-		}
-	}
-	return null
-}
 
 // Fill the puzzle
 let counter = 0
