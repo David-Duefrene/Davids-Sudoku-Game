@@ -1,7 +1,7 @@
 // Imports
 import { createSlice } from '@reduxjs/toolkit'
 
-import { emptyCellCoords, safeToPlace, nextEmptyCell } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
+import { emptyCellCoords, safeToPlace, fillPuzzle } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
 import type { ITile, ICoordinates } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
 import { shuffle } from '../../util/arrayFunctions/array'
 
@@ -9,38 +9,10 @@ import { shuffle } from '../../util/arrayFunctions/array'
 export type IGameBoardState = { board: ITile[][] }
 
 // Constants
-const numArray = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+const numArray = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 /* Local Helper Functions */
 // Grid Functions
-
-// Fill the puzzle
-let counter = 0
-const starterArray = Array.from({ length: 9 }, () =>
-	Array(9)
-		.fill(null)
-		.map(() => ({ value: null, immutable: true })),
-)
-type FFillPuzzle = (startingBoard?: ITile[][]) => ITile[][] | false
-const fillPuzzle: FFillPuzzle = (startingBoard = starterArray) => {
-	const emptyCell = nextEmptyCell(startingBoard)
-
-	if (emptyCell === null) return startingBoard
-
-	for (const num of shuffle(numArray)) {
-		counter++
-
-		if (counter > 25000) throw new Error('Recursion Timeout')
-
-		if (safeToPlace(startingBoard, emptyCell, num)) {
-			startingBoard[emptyCell.row][emptyCell.column].value = num
-			if (fillPuzzle(startingBoard)) return startingBoard
-
-			startingBoard[emptyCell.row][emptyCell.column].value = null
-		}
-	}
-	return false
-}
 
 // Find next empty cell
 type FNextStillEmptyCell = (
@@ -88,7 +60,7 @@ const multiplePossibleSolutions = (boardToCheck: ITile[][]): boolean => {
 	const emptyCellArray = emptyCellCoords(boardToCheck)
 	for (let index = 0; index < emptyCellArray.length; index++) {
 		// Rotate a clone of the emptyCellArray by one for each iteration
-		const emptyCellClone = [ ...emptyCellArray ]
+		const emptyCellClone = [...emptyCellArray]
 		const startingPoint = emptyCellClone.splice(index, 1)
 
 		emptyCellClone.unshift(startingPoint[0])
@@ -171,7 +143,7 @@ export const gameBoardSlice = createSlice({
 		setTile: (state, action) => {
 			const { row, column, value } = action.payload
 
-			const updatedBoard = state.board.map((rowArr) => [ ...rowArr ])
+			const updatedBoard = state.board.map((rowArr) => [...rowArr])
 
 			updatedBoard[row][column] = { value, immutable: false }
 

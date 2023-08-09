@@ -1,5 +1,7 @@
 import { range } from '../../arrayFunctions/array'
 
+import { shuffle } from '../../arrayFunctions/array'
+
 const VALID_VALUES = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
 
 export type ITile = {
@@ -86,5 +88,33 @@ export const nextEmptyCell = (board: ITile[][]): ICoordinates | null => {
 		}
 	}
 	return null
+}
+
+// Fill the puzzle
+let counter = 0
+const starterArray = Array.from({ length: 9 }, () =>
+	Array(9)
+		.fill(null)
+		.map(() => ({ value: null, immutable: true })),
+)
+type FFillPuzzle = (startingBoard?: ITile[][]) => ITile[][] | false
+export const fillPuzzle: FFillPuzzle = (startingBoard = starterArray) => {
+	const emptyCell = nextEmptyCell(startingBoard)
+
+	if (emptyCell === null) return startingBoard
+
+	for (const num of shuffle(VALID_VALUES)) {
+		counter++
+
+		if (counter > 25000) throw new Error('Recursion Timeout')
+
+		if (safeToPlace(startingBoard, emptyCell, num)) {
+			startingBoard[emptyCell.row][emptyCell.column].value = num
+			if (fillPuzzle(startingBoard)) return startingBoard
+
+			startingBoard[emptyCell.row][emptyCell.column].value = null
+		}
+	}
+	return false
 }
 
