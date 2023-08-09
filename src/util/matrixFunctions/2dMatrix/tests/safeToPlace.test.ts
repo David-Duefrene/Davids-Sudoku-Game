@@ -12,7 +12,7 @@ describe('safeToPlace', () => {
 
 	it('should return true if the number is safe to place in the empty cell', () => {
 		const emptyCell: ICoordinates = { row: 1, column: 1 }
-		const num = 10
+		const num = 5
 
 		const result = safeToPlace(board, emptyCell, num)
 		expect(result).toBe(true)
@@ -37,6 +37,14 @@ describe('safeToPlace', () => {
 	it('should return false if the number is already present in the grid', () => {
 		const emptyCell: ICoordinates = { row: 1, column: 1 }
 		const num = 1
+
+		const result = safeToPlace(board, emptyCell, num)
+		expect(result).toBe(false)
+	})
+
+	it('should return false if the number is not in the valid range', () => {
+		const emptyCell: ICoordinates = { row: 1, column: 1 }
+		const num = 10
 
 		const result = safeToPlace(board, emptyCell, num)
 		expect(result).toBe(false)

@@ -1,5 +1,7 @@
 import { range } from '../../arrayFunctions/array'
 
+const VALID_VALUES = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+
 export type ITile = {
 	value: number | null
 	immutable: boolean
@@ -66,6 +68,7 @@ type FSafeToPlace = (
 	num: number
 ) => boolean
 export const safeToPlace: FSafeToPlace = (board, emptyCell, num) => {
+	if (!VALID_VALUES.includes(num)) return false
 	const row = getRow(emptyCell.row, board)
 	const column = getColumn(emptyCell.column, board)
 	const grid = getGrid(emptyCell.row, emptyCell.column, board)
