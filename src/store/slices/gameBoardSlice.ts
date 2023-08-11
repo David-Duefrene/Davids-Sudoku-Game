@@ -1,43 +1,14 @@
 // Imports
 import { createSlice } from '@reduxjs/toolkit'
 
-import {
-	emptyCellCoords, safeToPlace, fillPuzzle, nextStillEmptyCell,
-} from '../../util/matrixFunctions/2dMatrix/2dMatrix'
-import type { ITile, ICoordinates } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
-import { shuffle } from '../../util/arrayFunctions/array'
+import { emptyCellCoords, fillPuzzle, fillFromArray } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
+import type { ITile } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
 
 // Types
 export type IGameBoardState = { board: ITile[][] }
 
-// Constants
-const numArray = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
-
 /* Local Helper Functions */
 // Grid Functions
-
-// Attempts to solve the puzzle by placing values into the board via the emptyCellArray
-const fillFromArray = (
-	startingBoard: ITile[][],
-	emptyCellArray: ICoordinates[],
-): ITile[][] | false => {
-	const emptyCell = nextStillEmptyCell(startingBoard, emptyCellArray)
-	let pokeCounter = 0
-
-	if (!emptyCell) return startingBoard
-
-	for (const num of shuffle(numArray)) {
-		pokeCounter++
-		if (pokeCounter > 60_000_000) throw new Error('Poke Timeout')
-		if (safeToPlace(startingBoard, emptyCell, num)) {
-			startingBoard[emptyCell.row][emptyCell.column].value = num
-			if (fillFromArray(startingBoard, emptyCellArray)) return startingBoard
-			startingBoard[emptyCell.row][emptyCell.column].value = null //0
-		}
-	}
-
-	return false
-}
 
 // Check if there are multiple possible solutions
 const multiplePossibleSolutions = (boardToCheck: ITile[][]): boolean => {

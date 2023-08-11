@@ -129,3 +129,23 @@ export const nextStillEmptyCell: FNextStillEmptyCell = (startingBoard, emptyCell
 	return false
 }
 
+// Attempts to solve the puzzle by placing values into the board via the emptyCellArray
+export const fillFromArray = (startingBoard: ITile[][], emptyCellArray: ICoordinates[]): ITile[][] | false => {
+	const emptyCell = nextStillEmptyCell(startingBoard, emptyCellArray)
+	let pokeCounter = 0
+
+	if (!emptyCell) return startingBoard
+
+	for (const num of shuffle(VALID_VALUES)) {
+		pokeCounter++
+		if (pokeCounter > 60_000_000) throw new Error('Poke Timeout')
+		if (safeToPlace(startingBoard, emptyCell, num)) {
+			startingBoard[emptyCell.row][emptyCell.column].value = num
+			if (fillFromArray(startingBoard, emptyCellArray)) return startingBoard
+			startingBoard[emptyCell.row][emptyCell.column].value = null
+		}
+	}
+
+	return false
+}
+
