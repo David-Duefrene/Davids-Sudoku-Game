@@ -149,3 +149,64 @@ export const fillFromArray = (startingBoard: ITile[][], emptyCellArray: ICoordin
 	return false
 }
 
+export const isValidSudoku = (board: ITile[][]): boolean => {
+	const rows = Array.from({ length: 9 }, () => new Set<number>())
+	const columns = Array.from({ length: 9 }, () => new Set<number>())
+	const grids = Array.from({ length: 9 }, () => new Set<number>())
+
+	for (let row = 0; row < 9; row++) {
+		for (let col = 0; col < 9; col++) {
+			const cellValue = board[row][col].value
+
+			if (cellValue === null) {
+				continue
+			}
+
+			const gridIndex = Math.floor(row / 3) * 3 + Math.floor(col / 3)
+
+			if (rows[row].has(cellValue) || columns[col].has(cellValue) || grids[gridIndex].has(cellValue)) {
+				return false
+			}
+
+			rows[row].add(cellValue)
+			columns[col].add(cellValue)
+			grids[gridIndex].add(cellValue)
+		}
+	}
+
+	return true
+}
+
+export const multiplePossibleSolutions = (boardToCheck: ITile[][]): boolean => {
+	const emptyCellArray = emptyCellCoords(boardToCheck)
+
+	const fillAndCountSolutions = (emptyCells: ICoordinates[], attempts: number): number => {
+		if (attempts <= 0) return 0
+
+		const cloneBoard = boardToCheck.map((row) => row.map((cell) => ({ ...cell })))
+		const selectedEmptyCell = emptyCells.pop()
+
+		if (!selectedEmptyCell) {
+			return isValidSudoku(cloneBoard) ? 1 : 0
+		}
+
+		let totalSolutions = 0
+
+		for (const num of shuffle(VALID_VALUES)) {
+			if (safeToPlace(cloneBoard, selectedEmptyCell, num)) {
+				cloneBoard[selectedEmptyCell.row][selectedEmptyCell.column].value = num
+				totalSolutions += fillAndCountSolutions([ ...emptyCells ], attempts - 1)
+				cloneBoard[selectedEmptyCell.row][selectedEmptyCell.column].value = null
+
+				if (totalSolutions > 1) {
+					return totalSolutions
+				}
+			}
+		}
+
+		return totalSolutions
+	}
+
+	return fillAndCountSolutions(emptyCellArray, 2) > 1
+}
+

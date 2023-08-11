@@ -5,7 +5,7 @@ import type { Mock } from 'vitest'
 
 import { range } from '../../../arrayFunctions/array'
 
-import { fillFromArray, nextStillEmptyCell, safeToPlace } from '../2dMatrix'
+import { fillFromArray, nextStillEmptyCell, safeToPlace, shuffle } from '../2dMatrix'
 import type { ITile, ICoordinates } from '../2dMatrix'
 import FILLEDBOARD from './result.json'
 

@@ -1,7 +1,7 @@
 // Imports
 import { createSlice } from '@reduxjs/toolkit'
 
-import { emptyCellCoords, fillPuzzle, fillFromArray } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
+import { fillPuzzle, multiplePossibleSolutions } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
 import type { ITile } from '../../util/matrixFunctions/2dMatrix/2dMatrix'
 
 // Types
@@ -9,28 +9,6 @@ export type IGameBoardState = { board: ITile[][] }
 
 /* Local Helper Functions */
 // Grid Functions
-
-// Check if there are multiple possible solutions
-const multiplePossibleSolutions = (boardToCheck: ITile[][]): boolean => {
-	const possibleSolutions = []
-	const emptyCellArray = emptyCellCoords(boardToCheck)
-	for (let index = 0; index < emptyCellArray.length; index++) {
-		// Rotate a clone of the emptyCellArray by one for each iteration
-		const emptyCellClone = [ ...emptyCellArray ]
-		const startingPoint = emptyCellClone.splice(index, 1)
-
-		emptyCellClone.unshift(startingPoint[0])
-		const thisSolution = fillFromArray(
-			boardToCheck.map((row) => row.slice()),
-			emptyCellClone,
-		)
-
-		if (!thisSolution) return false
-		possibleSolutions.push(thisSolution.join())
-		if (Array.from(new Set(possibleSolutions)).length > 1) return true
-	}
-	return false
-}
 
 // Makes empty tiles on the board
 const pokeHoles = (startingBoard: ITile[][], holes: number): ITile[][] => {

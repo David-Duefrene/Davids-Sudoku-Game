@@ -2,9 +2,9 @@
 export const range = (length: number) => Array.from(Array(length).keys())
 
 // Shuffle an Array
-export const shuffle = (array: number[]): number[] => {
+export const shuffle = <T>(array: T[]): T[] => {
 	let currentIndex = array.length
-	let temporaryValue: number, randomIndex: number
+	let temporaryValue: T, randomIndex: number
 
 	// While there remain elements to shuffle...
 	while (0 !== currentIndex) {
