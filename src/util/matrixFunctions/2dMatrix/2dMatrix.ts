@@ -210,3 +210,39 @@ export const multiplePossibleSolutions = (boardToCheck: ITile[][]): boolean => {
 	return fillAndCountSolutions(emptyCellArray, 2) > 1
 }
 
+// Makes empty tiles on the board
+export const pokeHoles = (startingBoard: ITile[][], holes: number): ITile[][] => {
+	const removedValues: {
+		rowIndex: number
+		colIndex: number
+		val: number | null
+	}[] = []
+
+	while (removedValues.length < holes) {
+		const val = Math.floor(Math.random() * 81)
+		const randomRowIndex = Math.floor(val / 9)
+		const randomColIndex = val % 9
+
+		if (!startingBoard[randomRowIndex]) continue // Guard against cloning error
+		// If cell already empty, restart loop
+		if (startingBoard[randomRowIndex][randomColIndex].value === null) continue
+
+		removedValues.push({
+			rowIndex: randomRowIndex,
+			colIndex: randomColIndex,
+			val: startingBoard[randomRowIndex][randomColIndex].value,
+		})
+
+		startingBoard[randomRowIndex][randomColIndex].value = null // Poke a hole in the board at the coords
+		startingBoard[randomRowIndex][randomColIndex].immutable = false
+
+		if (multiplePossibleSolutions(startingBoard.map((row) => row.slice()))) {
+			const temp = removedValues.pop()?.val
+			if (temp === undefined) throw new Error('Temp is undefined')
+			startingBoard[randomRowIndex][randomColIndex].value = temp
+			startingBoard[randomRowIndex][randomColIndex].immutable = true
+		}
+	}
+	return startingBoard
+}
+
