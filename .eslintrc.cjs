@@ -13,11 +13,21 @@ module.exports = {
 	rules: {
 		// TypeScript
 		'@typescript-eslint/no-explicit-any': 'error',
-		// JavaScript
+		/*
+		 * JavaScript
+		 * Max line length 120
+		 */
+		'max-len': [ 'error', { code: 120 } ],
+		'no-console': 'off',
 		'implicit-arrow-linebreak': 'off',
-		'object-curly-newline': [ 'error', {
-			'minProperties': 5, 'multiline': true, 'consistent': true,
-		} ],
+		'object-curly-newline': [
+			'error',
+			{
+				minProperties: 5,
+				multiline: true,
+				consistent: true,
+			},
+		],
 		// React
 		'react/react-in-jsx-scope': 'off',
 		'react-refresh/only-export-components': 'warn',

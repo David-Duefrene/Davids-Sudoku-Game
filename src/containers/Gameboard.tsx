@@ -4,7 +4,7 @@ import GridButton from '../components/grid/gridButton'
 import Winner from '../components/PopUps/Winner/Winner'
 
 import { RootState } from '../store/store'
-import { getColumn, getGrid, getRow } from '../store/slices/gameBoardSlice'
+import { getRow, getColumn, getGrid } from '../util/matrixFunctions/2dMatrix/2dMatrix'
 
 const App = () => {
 	const gameState = useSelector((state: RootState) => state.gameState.board)
