@@ -37,11 +37,10 @@ const App = () => {
 	})
 
 	return (
-		<>
+		<section className='container mx-auto'>
 			<Winner isOpen={isSolved} />
-			<h1 className='leading-5 text-5xl text-center'>Sudoku</h1>
-			<div className='grid grid-cols-9 gap-2'>{tiles}</div>
-		</>
+			<div className='grid grid-cols-9 gap-1 sm:gap-2'>{tiles}</div>
+		</section>
 	)
 }
 
